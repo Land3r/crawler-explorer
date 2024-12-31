@@ -346,14 +346,14 @@ const Root: FC = () => {
 
         {dataReady && (
           <>
-            <div className="buttons text-primary" id="buttons">
+            <div className="buttons text-primary">
               <button id="random" type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-1 mr-1 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" onClick={randomLayout}>
                 <span>
                   <GiPerspectiveDiceSixFacesRandomExtended className="w-5 h-5 mr-1" />
                   Random
                 </span>
               </button>
-              <button id="forceatlas2" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-15 text-center mr-1 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={toggleFA2Layout}>
+              <button id="forceatlas2" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-1 text-center mr-1 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={toggleFA2Layout}>
                 <span>
                   <PiGraphExtended className="w-5 h-5 mr-1" />
                   Force Atlas 2

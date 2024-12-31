@@ -65,7 +65,7 @@ const DomainsPanel: FC<{
       <p>
         <i className="text-muted">Click a domain to show/hide related pages from the network.</i>
       </p>
-      <p className="buttons">
+      <p className="panel-buttons">
         <button className="btn" onClick={() => setDomains(mapValues(keyBy(domains, "key"), () => true))}>
           <AiOutlineCheckCircle /> Check all
         </button>{" "}

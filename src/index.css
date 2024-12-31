@@ -182,7 +182,7 @@ button.btn:hover {
 button.btn > * {
   vertical-align: baseline;
 }
-.buttons {
+.panel-buttons {
   display: flex;
   justify-content: space-between;
 }
