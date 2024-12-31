@@ -87,6 +87,11 @@ body {
   bottom: var(--stage-padding);
   left: var(--stage-padding);
 }
+.buttons {
+  position: absolute;
+  top: var(--stage-padding);
+  right: var(--stage-padding);
+}
 .graph-title {
   z-index: 1;
   position: absolute;

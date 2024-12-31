@@ -14,10 +14,9 @@ export default function FileUpload({ onFileUpload, onError }: FileUploadProps) {
     reader.onload = (event) => {
       try {
         const jsonData = JSON.parse(event.target?.result as string)
-        console.log('Interpreted', jsonData)
         onFileUpload(jsonData)
       } catch (error) {
-        console.log('Error', error)
+        console.log('Error while reading file', error)
         onError('Invalid JSON file. Please upload a valid JSON file.')
       }
     }

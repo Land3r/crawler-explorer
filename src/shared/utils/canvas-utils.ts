@@ -37,8 +37,6 @@ export function drawHover(context: CanvasRenderingContext2D, data: PlainObject, 
   const weight = settings.labelWeight;
   const subLabelSize = size - 2;
 
-console.log(data)
-
   const label = data.label;
   const subLabel = data.tag !== "unknown" ? data.tag : "dsqdqs";
   const typeLabel = data.data.type.split(' ').map((elm: string) => elm[0].toUpperCase() + elm.substr(1)).join(' ');
@@ -90,7 +88,6 @@ console.log(data)
   }
 
   if (sourceLabel) {
-    console.log('Draw', sourceLabel)
     context.fillStyle = TEXT_COLOR;
     context.font = `${weight} ${subLabelSize}px ${font}`;
     context.fillText(sourceLabel, data.x + data.size + 3, data.y + 2 * size + 6);
