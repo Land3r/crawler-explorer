@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react'
 
-interface FileUploadProps {
-  onFileUpload: (data: unknown) => void
+interface FileUploadProps<T> {
+  onFileUpload: (data: T) => void
   onError: (message: string) => void
 }
 
-export default function FileUpload({ onFileUpload, onError }: FileUploadProps) {
+export default function FileUpload<T>({ onFileUpload, onError }: FileUploadProps<T>) {
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 

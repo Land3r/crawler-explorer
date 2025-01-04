@@ -35,7 +35,7 @@ const Root: FC = () => {
   const [showContents, setShowContents] = useState(false);
   const [dataReady, setDataReady] = useState(false);
   const [dataset, setDataset] = useState<Dataset | null>(null);
-  const [data, setData] = useState<unknown | null>(null);
+  const [data, setData] = useState<CrawlerEntry[] | null>(null);
   const [filtersState, setFiltersState] = useState<FiltersState>({
     types: {},
     domains: {}
@@ -134,7 +134,7 @@ const Root: FC = () => {
   }
 
   useEffect(() => {
-    if (data === null) return;
+    if (data === null || data === undefined) return;
 
     const types = keyBy([...new Set([...data.map((elm: CrawlerEntry) => elm.type)])])
     const domains = keyBy([...new Set([...data.map((elm: CrawlerEntry) => extractHostname(elm.source))])])
@@ -248,7 +248,7 @@ const Root: FC = () => {
     setData(null)
   }
 
-  const onFileUpload = (data: unknown) => {
+  const onFileUpload = (data: CrawlerEntry[]) => {
     setErrors([])
     setData(data)
   }
