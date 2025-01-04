@@ -148,7 +148,8 @@ const Root: FC = () => {
           y: Math.random(),
           // Default size that will be overwritten later.
           size: 3,
-          label: item.title,
+          label: (item.title !== null && item.title !== undefined && item.title !== '') ? item.title :
+            (item.filename !== null && item.filename !== undefined && item.filename !== '') ? item.filename : '',
           color: getColor(item.type ?? 'page'),
           source: item.source,
           data: { ...item }

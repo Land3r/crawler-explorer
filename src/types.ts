@@ -39,6 +39,7 @@ export interface CrawlerEntry {
   localDepth: number,
   pdf: string,
   title: string,
+  filename?: string;
   type: string
 }
 
