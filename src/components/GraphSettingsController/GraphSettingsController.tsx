@@ -46,7 +46,7 @@ const GraphSettingsController: FC<PropsWithChildren<{ hoveredNode: string | null
         return data;
       },
     });
-  }, [sigma, graph, debouncedHoveredNode]);
+  }, [sigma, graph, debouncedHoveredNode, setSettings]);
 
   /**
    * Update node and edge reducers when a node is hovered, to highlight its
@@ -75,7 +75,7 @@ const GraphSettingsController: FC<PropsWithChildren<{ hoveredNode: string | null
               : { ...data, color: EDGE_FADE_COLOR, hidden: true }
         : null,
     );
-  }, [debouncedHoveredNode]);
+  }, [debouncedHoveredNode, setSettings, graph, sigma]);
 
   return <>{children}</>;
 };

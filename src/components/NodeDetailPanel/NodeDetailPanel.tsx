@@ -15,7 +15,7 @@ const NodeDetailPanel: FC<{ node: string | null }> = ({ node }) => {
       const {hidden, ...attr} = graph.getNodeAttribute(node, 'data');
       setAttributes(attr);
     }
-  }, [node])
+  }, [node, graph])
 
   return (
     <Panel

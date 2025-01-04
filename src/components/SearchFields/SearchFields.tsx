@@ -1,6 +1,6 @@
 import { useSigma } from "@react-sigma/core";
 import { Attributes } from "graphology-types";
-import { ChangeEvent, FC, KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, FC, KeyboardEvent, useCallback, useEffect, useState } from "react";
 
 import { FiltersState } from "../../types";
 import { BsSearchExtended } from "../Icons/Icons";
@@ -18,7 +18,7 @@ const SearchField: FC<{ filters: FiltersState }> = ({ filters }) => {
   const [values, setValues] = useState<Array<{ id: string; label: string }>>([]);
   const [selected, setSelected] = useState<string | null>(null);
 
-  const refreshValues = () => {
+  const refreshValues = useCallback(() => {
     const newValues: Array<{ id: string; label: string }> = [];
     const lcSearch = search.toLowerCase();
     if (!selected && search.length > 1) {
@@ -28,15 +28,15 @@ const SearchField: FC<{ filters: FiltersState }> = ({ filters }) => {
       });
     }
     setValues(newValues);
-  };
+  }, [selected, sigma, search]);
 
   // Refresh values when search is updated:
-  useEffect(() => refreshValues(), [search]);
+  useEffect(() => refreshValues(), [search, refreshValues]);
 
   // Refresh values when filters are updated (but wait a frame first):
   useEffect(() => {
     requestAnimationFrame(refreshValues);
-  }, [filters]);
+  }, [filters, refreshValues]);
 
   useEffect(() => {
     if (!selected) return;
@@ -55,7 +55,7 @@ const SearchField: FC<{ filters: FiltersState }> = ({ filters }) => {
     return () => {
       sigma.getGraph().setNodeAttribute(selected, "highlighted", false);
     };
-  }, [selected]);
+  }, [selected, sigma, refreshValues]);
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const searchString = e.target.value;

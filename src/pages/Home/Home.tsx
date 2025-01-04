@@ -22,20 +22,20 @@ import { NodeDetailPanel } from "../../components/NodeDetailPanel";
 import { FileUpload } from "../../components/FileUpload";
 import { ErrorBox } from "../../components/ErrorBox";
 import { TypesPanel } from "../../components/TypesPanel";
-import { getNodeImage } from "../../shared/utils/image-utils";
 import { extractHostname } from "../../shared/utils/url-utils";
 import { DomainsPanel } from "../../components/DomainsPanel";
 import { getColor, stringToColor } from "../../shared/utils/color-utils";
 import { animateNodes } from "sigma/utils";
 import { PlainObject } from "sigma/types";
-import { GiPerspectiveDiceSixFacesRandomExtended, LuCircleDashedExtended, PiGraphExtended } from "../../components/Icons/Icons";
+import { GiPerspectiveDiceSixFacesRandomExtended, IoMdCloseExtended, LuCircleDashedExtended, PiGraphExtended } from "../../components/Icons/Icons";
+import { GitHubLink } from "../../components/GitHubLink";
 
 const Root: FC = () => {
   const graph = useMemo(() => new DirectedGraph(), []);
   const [showContents, setShowContents] = useState(false);
   const [dataReady, setDataReady] = useState(false);
   const [dataset, setDataset] = useState<Dataset | null>(null);
-  const [data, setData] = useState<any | null>(null);
+  const [data, setData] = useState<unknown | null>(null);
   const [filtersState, setFiltersState] = useState<FiltersState>({
     types: {},
     domains: {}
@@ -68,23 +68,19 @@ const Root: FC = () => {
     [],
   );
 
-  // A variable is used to toggle state between start and stop
+  // Allows to cancel random layout animation on another layout trigger.
   let cancelCurrentAnimation: (() => void) | null = null;
 
-  // correlate start/stop actions with state management
+  // 2FA Layout
   function stopFA2() {
     fa2Layout?.stop();
-    // FA2StartLabel.style.display = "flex";
-    // FA2StopLabel.style.display = "none";
   }
   function startFA2() {
-    if (cancelCurrentAnimation) cancelCurrentAnimation();
+    if (cancelCurrentAnimation) {
+      cancelCurrentAnimation();
+    }
     fa2Layout?.start();
-    // FA2StartLabel.style.display = "none";
-    // FA2StopLabel.style.display = "flex";
   }
-
-  // the main toggle function
   function toggleFA2Layout() {
     if (fa2Layout?.isRunning()) {
       stopFA2();
@@ -92,92 +88,50 @@ const Root: FC = () => {
       startFA2();
     }
   }
-    /** CIRCULAR LAYOUT **/
-    /* This example shows how to use an existing deterministic graphology layout */
-    function circularLayout() {
-      // stop fa2 if running
-      if (fa2Layout?.isRunning()) stopFA2();
-      if (cancelCurrentAnimation) cancelCurrentAnimation();
-
-      //since we want to use animations we need to process positions before applying them through animateNodes
-      const circularPositions = circular(graph, { scale: 100 });
-      //In other context, it's possible to apply the position directly we : circular.assign(graph, {scale:100})
-      cancelCurrentAnimation = animateNodes(graph, circularPositions, { duration: 2000, easing: "linear" });
+    
+  // Circular Layout
+  function circularLayout() {
+    if (fa2Layout?.isRunning()) {
+      stopFA2();
     }
+    if (cancelCurrentAnimation) {
+      cancelCurrentAnimation();
+    }
+
+    const circularPositions = circular(graph, { scale: 100 });
+    cancelCurrentAnimation = animateNodes(graph, circularPositions, { duration: 2000, easing: "linear" });
+  }
 
   // Random layout
-      /** RANDOM LAYOUT **/
-    /* Layout can be handled manually by setting nodes x and y attributes */
-    /* This random layout has been coded to show how to manipulate positions directly in the graph instance */
-    /* Alternatively a random layout algo exists in graphology: https://github.com/graphology/graphology-layout#random  */
-    function randomLayout() {
-      // stop fa2 if running
-      if (fa2Layout?.isRunning()) stopFA2();
-      if (cancelCurrentAnimation) cancelCurrentAnimation();
-
-      // to keep positions scale uniform between layouts, we first calculate positions extents
-      const xExtents = { min: 0, max: 0 };
-      const yExtents = { min: 0, max: 0 };
-      graph.forEachNode((_node, attributes) => {
-        xExtents.min = Math.min(attributes.x, xExtents.min);
-        xExtents.max = Math.max(attributes.x, xExtents.max);
-        yExtents.min = Math.min(attributes.y, yExtents.min);
-        yExtents.max = Math.max(attributes.y, yExtents.max);
-      });
-      const randomPositions: PlainObject<PlainObject<number>> = {};
-      graph.forEachNode((node) => {
-        // create random positions respecting position extents
-        randomPositions[node] = {
-          x: Math.random() * (xExtents.max - xExtents.min),
-          y: Math.random() * (yExtents.max - yExtents.min),
-        };
-      });
-      // use sigma animation to update new positions
-      cancelCurrentAnimation = animateNodes(graph, randomPositions, { duration: 2000 });
+  function randomLayout() {
+    if (fa2Layout?.isRunning()) {
+      stopFA2();
+    }
+    if (cancelCurrentAnimation) {
+      cancelCurrentAnimation();
     }
 
-  // Load data on mount:
-  // useEffect(() => {
-  //   fetch(`./sample.json`)
-  //     .then((res) => res.json())
-  //     .then((dataset: Dataset) => {
-  //       const clusters = keyBy(dataset.clusters, "key");
-  //       const tags = keyBy(dataset.tags, "key");
+    const xExtents = { min: 0, max: 0 };
+    const yExtents = { min: 0, max: 0 };
+    graph.forEachNode((_node, attributes) => {
+      xExtents.min = Math.min(attributes.x, xExtents.min);
+      xExtents.max = Math.max(attributes.x, xExtents.max);
+      yExtents.min = Math.min(attributes.y, yExtents.min);
+      yExtents.max = Math.max(attributes.y, yExtents.max);
+    });
+    const randomPositions: PlainObject<PlainObject<number>> = {};
+    graph.forEachNode((node) => {
+      randomPositions[node] = {
+        x: Math.random() * (xExtents.max - xExtents.min),
+        y: Math.random() * (yExtents.max - yExtents.min),
+      };
+    });
+    cancelCurrentAnimation = animateNodes(graph, randomPositions, { duration: 2000 });
+  }
 
-  //       dataset.nodes.forEach((node) =>
-  //         graph.addNode(node.key, {
-  //           ...node,
-  //           ...omit(clusters[node.cluster], "key"),
-  //           image: `./images/${tags[node.tag].image}`,
-  //         }),
-  //       );
-  //       dataset.edges.forEach(([source, target]) => graph.addEdge(source, target, { size: 1 }));
-
-  //       // Use degrees as node sizes:
-  //       const scores = graph.nodes().map((node) => graph.getNodeAttribute(node, "score"));
-  //       const minDegree = Math.min(...scores);
-  //       const maxDegree = Math.max(...scores);
-  //       const MIN_NODE_SIZE = 3;
-  //       const MAX_NODE_SIZE = 30;
-  //       graph.forEachNode((node) =>
-  //         graph.setNodeAttribute(
-  //           node,
-  //           "size",
-  //           ((graph.getNodeAttribute(node, "score") - minDegree) / (maxDegree - minDegree)) *
-  //           (MAX_NODE_SIZE - MIN_NODE_SIZE) +
-  //           MIN_NODE_SIZE,
-  //         ),
-  //       );
-
-  //       setFiltersState({
-  //         clusters: mapValues(keyBy(dataset.clusters, "key"), constant(true)),
-  //         tags: mapValues(keyBy(dataset.tags, "key"), constant(true)),
-  //       });
-  //       setDataset(dataset);
-  //       requestAnimationFrame(() => setDataReady(true));
-  //     });
-  // }, []);
-
+  function resetGraph() {
+    window.location.reload();
+  }
 
   useEffect(() => {
     if (data === null) return;
@@ -185,12 +139,11 @@ const Root: FC = () => {
     const types = keyBy([...new Set([...data.map((elm: CrawlerEntry) => elm.type)])])
     const domains = keyBy([...new Set([...data.map((elm: CrawlerEntry) => extractHostname(elm.source))])])
 
-    // Add nodes
+    // Nodes
     data.forEach((item: CrawlerEntry) => {
       try {
         // Default node key is it's id.
         graph.addNode(item.id, {
-          // Assign random coordinates to nodes, as it will be reordered in later stages.
           x: Math.random(),
           y: Math.random(),
           // Default size that will be overwritten later.
@@ -198,7 +151,6 @@ const Root: FC = () => {
           label: item.title,
           color: getColor(item.type ?? 'page'),
           source: item.source,
-          image: getNodeImage(item),
           data: { ...item }
         });
       } catch (error: unknown) {
@@ -218,7 +170,7 @@ const Root: FC = () => {
       }
     });
 
-    // Add edges
+    // Edges
     data.forEach((item: CrawlerEntry) => {
       try {
 
@@ -245,7 +197,7 @@ const Root: FC = () => {
       }
     });
 
-    // Use edges as node sizes:
+    // Use edge count from & to nodes to change it's size
     const scores = graph.nodes().map((node) => graph.edges(node).length);
     const minDegree = Math.min(...scores);
     const maxDegree = Math.max(...scores);
@@ -289,14 +241,14 @@ const Root: FC = () => {
       ],
     });
     requestAnimationFrame(() => setDataReady(true));
-  }, [data])
+  }, [data, graph])
 
   const onError = (error: string) => {
     setErrors(errors => [...errors, error])
     setData(null)
   }
 
-  const onFileUpload = (data: any) => {
+  const onFileUpload = (data: unknown) => {
     setErrors([])
     setData(data)
   }
@@ -305,34 +257,13 @@ const Root: FC = () => {
     <>
       <div id="app-root" className="show-contents">
         <div className="flex flex-col">
-
           <div className="graph-title">
             <h1>A cartography of crawler result</h1>
           </div>
-          {/* <div className="flex flex-col justify-center content-center place-content-center h-full">
-            <div className="max-w-2xl mx-auto">
-
-              <div className="flex items-center justify-center w-full">
-                <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg className="w-10 h-10 mb-3 text-black-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                    <p className="mb-2 text-sm text-black-500 dark:text-black-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-black-500 dark:text-black-400">JSON file</p>
-                  </div>
-                  <input id="dropzone-file" type="file" className="hidden" />
-                </label>
-              </div>
-
-              <p className="mt-5">This file input component is part of a larger, open-source library of Tailwind CSS components. Learn
-                more
-                by going to the official <a className="text-blue-600 hover:underline"
-                  href="#" target="_blank">Flowbite Documentation</a>.
-              </p>
-              <script src="https://unpkg.com/flowbite@1.4.0/dist/flowbite.js"></script>
-            </div>          </div> */}
           <FileUpload onFileUpload={onFileUpload} onError={onError} />
           {errors && errors.map(error => <ErrorBox message={error} title="Error while importing data" key={error} />)}
         </div>
+        <GitHubLink repoUrl='https://github.com/Land3r/crawler-explorer' />
       </div>
     </>
   );
@@ -360,7 +291,16 @@ const Root: FC = () => {
                 </span>
               </button>
               <button id="circular" type="button" className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-3 py-1 text-center mr-1 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onClick={circularLayout}>
-                <span><LuCircleDashedExtended className="w-5 h-5 mr-1"/>circular</span>
+                <span>
+                  <LuCircleDashedExtended className="w-5 h-5 mr-1" />
+                  Circular
+                </span>
+              </button>
+              <button id="reset" type="button" className="text-white bg-red-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-1 text-center mr-1 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onClick={resetGraph}>
+                <span>
+                  <IoMdCloseExtended className="w-5 h-5 mr-1" />
+                  Reset
+                </span>
               </button>
             </div>
             <div className="controls">
@@ -430,40 +370,6 @@ const Root: FC = () => {
                     }));
                   }}
                 />
-                {/* <ClustersPanel
-                  clusters={dataset.clusters}
-                  filters={filtersState}
-                  setClusters={(clusters) =>
-                    setFiltersState((filters) => ({
-                      ...filters,
-                      clusters,
-                    }))
-                  }
-                  toggleCluster={(cluster) => {
-                    setFiltersState((filters) => ({
-                      ...filters,
-                      clusters: filters.clusters[cluster]
-                        ? omit(filters.clusters, cluster)
-                        : { ...filters.clusters, [cluster]: true },
-                    }));
-                  }}
-                />
-                <TagsPanel
-                  tags={dataset.tags}
-                  filters={filtersState}
-                  setTags={(tags) =>
-                    setFiltersState((filters) => ({
-                      ...filters,
-                      tags,
-                    }))
-                  }
-                  toggleTag={(tag) => {
-                    setFiltersState((filters) => ({
-                      ...filters,
-                      tags: filters.tags[tag] ? omit(filters.tags, tag) : { ...filters.tags, [tag]: true },
-                    }));
-                  }}
-                /> */}
                 <NodeDetailPanel node={selectedNode} />
               </div>
             </div>

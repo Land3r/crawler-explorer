@@ -20,7 +20,7 @@ const TypesPanel: FC<{
     const index: Record<string, number> = {};
     graph.forEachNode((_, { type }) => (index[type] = (index[type] || 0) + 1));
     return index;
-  }, []);
+  }, [graph]);
 
   const maxNodesPerType = useMemo(() => Math.max(...values(nodesPerType)), [nodesPerType]);
   const visibleTypesCount = useMemo(() => Object.keys(filters.types).length, [filters]);
@@ -35,7 +35,7 @@ const TypesPanel: FC<{
       graph.forEachNode((_, { type, hidden }) => !hidden && (index[type] = (index[type] || 0) + 1));
       setVisibleNodesPerType(index);
     });
-  }, [filters]);
+  }, [filters, graph]);
 
   const sortedTypes = useMemo(
     () => sortBy(types, (type) => -nodesPerType[type.key]),

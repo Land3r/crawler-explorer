@@ -39,7 +39,7 @@ const GraphEventsController: FC<PropsWithChildren<{ setHoveredNode: (node: strin
         if (mouseLayer) mouseLayer.classList.remove("mouse-pointer");
       },
     });
-  }, []);
+  }, [graph, registerEvents, setHoveredNode, setSelectedNode]);
 
   return <>{children}</>;
 };

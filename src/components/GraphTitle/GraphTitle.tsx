@@ -22,7 +22,7 @@ const GraphTitle: FC<{ filters: FiltersState }> = ({ filters }) => {
       graph.forEachEdge((_, _2, _3, _4, source, target) => !source.hidden && !target.hidden && index.edges++);
       setVisibleItems(index);
     });
-  }, [filters]);
+  }, [filters, graph]);
 
   return (
     <div className="graph-title">

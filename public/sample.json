@@ -8,7 +8,7 @@
     "localDepth": 0,
     "pdf": "storage/pdf/90806c81-ba66-4367-83ae-d9a0d22e6a85.pdf",
     "title": "Homepage",
-    "axa_type": [
+    "some_arg": [
       1,
       5,
       12
@@ -23,7 +23,7 @@
     "localDepth": 1,
     "pdf": "storage/pdf/90806c81-ba66-4367-83ae-d9a0d22e6a85.pdf",
     "title": "Some title",
-    "axa_type": [
+    "some_arg": [
       1,
       5,
       12
@@ -41,7 +41,7 @@
     "depth": 1,
     "localDepth": 1,
     "title": "Some other page",
-    "axa_type": [
+    "some_arg": [
       1,
       5,
       12
@@ -59,7 +59,7 @@
     "depth": 1,
     "localDepth": 1,
     "title": "Sub page",
-    "axa_type": [
+    "some_arg": [
       1,
       5,
       12
@@ -76,8 +76,47 @@
     "createdAt": 1734731465,
     "depth": 2,
     "localDepth": 1,
-    "title": "Document",
-    "axa_type": [
+    "title": "",
+    "filename": "Document.pdf",
+    "some_arg": [
+      1,
+      5,
+      12
+    ],
+    "type": "pdf",
+    "parent": {
+      "id": "29517bb5-621a-493e-96bf-0775530717a3",
+      "source": "http://placehold.it/23"
+    }
+  },
+  {
+    "id": "13e30299-f979-4084-9efd-4fcc56e10561",
+    "source": "http://placehold.it/25",
+    "createdAt": 1734731465,
+    "depth": 2,
+    "localDepth": 1,
+    "title": "",
+    "filename": "Another_Document.pdf",
+    "some_arg": [
+      1,
+      5,
+      12
+    ],
+    "type": "pdf",
+    "parent": {
+      "id": "29517bb5-621a-493e-96bf-0775530717a3",
+      "source": "http://placehold.it/23"
+    }
+  },
+  {
+    "id": "ac8dd9df-8d11-4b88-9821-5195fd542398",
+    "source": "http://placehold.it/25",
+    "createdAt": 1734731465,
+    "depth": 2,
+    "localDepth": 1,
+    "title": "",
+    "filename": "Another_Document.pdf",
+    "some_arg": [
       1,
       5,
       12

@@ -24,7 +24,7 @@ const DomainsPanel: FC<{
       index[domain] = (index[domain] || 0) + 1;
     })
     return index;
-  }, []);
+  }, [graph]);
 
   const maxNodesPerDomain = useMemo(() => Math.max(...values(nodesPerDomain)), [nodesPerDomain]);
   const visibleDomainsCount = useMemo(() => Object.keys(filters.domains).length, [filters]);
@@ -39,7 +39,7 @@ const DomainsPanel: FC<{
       graph.forEachNode((_, { type, hidden }) => !hidden && (index[type] = (index[type] || 0) + 1));
       setVisibleNodesPerDomain(index);
     });
-  }, [filters]);
+  }, [filters, graph]);
 
   const sortedDomains = useMemo(
     () => sortBy(domains, (domain) => -nodesPerDomain[domain.key]),

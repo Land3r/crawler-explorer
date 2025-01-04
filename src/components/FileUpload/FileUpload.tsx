@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 
 interface FileUploadProps {
-  onFileUpload: (data: any) => void
+  onFileUpload: (data: unknown) => void
   onError: (message: string) => void
 }
 
