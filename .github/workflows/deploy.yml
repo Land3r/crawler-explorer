@@ -40,3 +40,4 @@ jobs:
         uses: actions/deploy-pages@v4
     permissions:
       id-token: write
+      pages: write
