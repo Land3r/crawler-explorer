@@ -5,7 +5,7 @@ import { Routes as ReactRoutes } from 'react-router'
 const Routes = () => {
     return (
         <ReactRoutes>
-            <Route path="/" Component={Home}></Route>
+            <Route path="/" Component={Home} index></Route>
         </ReactRoutes>
     )
 }
