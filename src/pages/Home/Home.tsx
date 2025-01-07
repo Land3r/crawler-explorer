@@ -199,11 +199,11 @@ const Root: FC = () => {
     });
 
     // Use edge count from & to nodes to change it's size
-    const scores = graph.nodes().map((node) => graph.edges(node).length);
-    const minDegree = Math.min(...scores);
-    const maxDegree = Math.max(...scores);
-    const MIN_NODE_SIZE = 3;
-    const MAX_NODE_SIZE = 30;
+    const scores = graph.nodes().map((node) => graph.edges(node).length)
+    const minDegree = Math.min(...scores)
+    const maxDegree = Math.max(...scores)
+    const MIN_NODE_SIZE = 3
+    const MAX_NODE_SIZE = 30
     graph.forEachNode((node) =>
       graph.setNodeAttribute(
         node,
